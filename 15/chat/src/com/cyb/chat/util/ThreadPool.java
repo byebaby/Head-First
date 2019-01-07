@@ -17,7 +17,7 @@ public class ThreadPool {
             .setNameFormat("chatServer-pool-%d").build(), new ThreadPoolExecutor.AbortPolicy());
 
     private ThreadPool() {
-        new Thread();
+
     }
 
     public static ScheduledExecutorService getScheduledThreadPoolExecutor() {

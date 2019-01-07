@@ -39,7 +39,6 @@ public class Client {
                 user = new User(easySocket);
                 System.out.println("客户端初始化完成");
                 System.out.println("=============================================");
-
             } catch (NumberFormatException e) {
                 System.out.println("格式异常（错误原因：" + e.getMessage() + "）");
                 continue;
