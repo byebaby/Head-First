@@ -57,7 +57,7 @@ public class Server {
         new Server().go();
     }
 
-    private static void clientMsgHandler(Vector<User> users, User user, Result result) {
+    private void clientMsgHandler(Vector<User> users, User user, Result result) {
         BaseClientHandler baseClientHandler = new CmdClientHandler(null);
         baseClientHandler = new NameClientHandler(baseClientHandler);
         baseClientHandler = new MsgClientHandler(baseClientHandler);
@@ -66,7 +66,7 @@ public class Server {
         baseClientHandler.handlerResult(users, user, result);
     }
 
-    private static class ClientRunnable implements Runnable {
+    private class ClientRunnable implements Runnable {
         private User user;
         private Instant instantHeart = Instant.now();
         private int heartTimeout = 20;
@@ -101,7 +101,7 @@ public class Server {
         }
     }
 
-    private static class HeartRunnable implements Runnable {
+    private class HeartRunnable implements Runnable {
         @Override
         public void run() {
             for (User user : users) {

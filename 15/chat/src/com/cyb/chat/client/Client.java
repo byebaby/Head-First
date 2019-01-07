@@ -22,7 +22,7 @@ public class Client {
 
     private static Scanner scanner;
     private static User user;
-    private static Instant instantHeart = Instant.now();
+    private static Instant instantHeart;
     private static final int HEART_TIMEOUT = 20;
 
     static {
@@ -38,6 +38,7 @@ public class Client {
                 System.out.println("服务器连接成功");
                 user = new User(easySocket);
                 System.out.println("客户端初始化完成");
+                instantHeart = Instant.now();
                 System.out.println("=============================================");
             } catch (NumberFormatException e) {
                 System.out.println("格式异常（错误原因：" + e.getMessage() + "）");
@@ -90,7 +91,7 @@ public class Client {
         baseServerHandler.handlerResult(user, result);
     }
 
-    private static class ReadRunnable implements Runnable {
+    private class ReadRunnable implements Runnable {
         @Override
         public void run() {
             try {
@@ -114,7 +115,7 @@ public class Client {
         }
     }
 
-    private static class HeartRunnable implements Runnable {
+    private  class HeartRunnable implements Runnable {
         @Override
         public void run() {
             user.tellHeart();
