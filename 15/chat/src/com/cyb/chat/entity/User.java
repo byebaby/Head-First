@@ -39,8 +39,8 @@ public class User {
         this.tempName = tempName;
     }
 
-    public String getRemoteSocketAddress() {
-        return easySocket.getSocket().getRemoteSocketAddress().toString();
+    public String getHostAddress() {
+        return easySocket.getSocket().getInetAddress().getHostAddress();
     }
 
     public void close() throws IOException {

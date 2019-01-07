@@ -9,7 +9,6 @@ import com.cyb.chat.model.Result;
  * 命令行处理类
  */
 public class CmdServerHandler extends BaseServerHandler {
-
     public CmdServerHandler(BaseServerHandler baseServerHandler) {
         super(baseServerHandler);
     }

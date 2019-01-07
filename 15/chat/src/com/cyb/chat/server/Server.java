@@ -1,9 +1,9 @@
 package com.cyb.chat.server;
 
-import com.cyb.chat.util.EasySocket;
 import com.cyb.chat.entity.User;
 import com.cyb.chat.handler.client.*;
 import com.cyb.chat.model.Result;
+import com.cyb.chat.util.EasySocket;
 import com.cyb.chat.util.ThreadPool;
 
 import java.io.IOException;
@@ -42,14 +42,13 @@ public class Server {
     }
 
     private void go() {
-        ThreadPool.getExecutorService().scheduleWithFixedDelay(new HeartRunnable(), 0, 5, TimeUnit.SECONDS);
+        ThreadPool.getScheduledThreadPoolExecutor().scheduleWithFixedDelay(new HeartRunnable(), 0, 5, TimeUnit.SECONDS);
         while (true) {
             try {
                 EasySocket easySocket = new EasySocket(serverSocket.accept());
-                ThreadPool.getExecutorService().execute(new ClientRunnable(easySocket));
+                ThreadPool.getThreadPoolExecutor().execute(new ClientRunnable(easySocket));
             } catch (IOException e) {
                 e.printStackTrace();
-                break;
             }
         }
     }
@@ -91,7 +90,7 @@ public class Server {
                     if (Duration.between(instantHeart, Instant.now()).getSeconds() > heartTimeout) {
                         BaseClientHandler.chatTellNotify(users, "用户退出: " + user.getName());
                         users.remove(user);
-                        System.out.println(user.getRemoteSocketAddress() + "已退出");
+                        System.out.println(user.getHostAddress() + "已退出");
                         user.close();
                         break;
                     }

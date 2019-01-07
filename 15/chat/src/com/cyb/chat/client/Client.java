@@ -1,10 +1,10 @@
 package com.cyb.chat.client;
 
-import com.cyb.chat.util.EasySocket;
 import com.cyb.chat.entity.User;
 import com.cyb.chat.handler.cmd.*;
 import com.cyb.chat.handler.server.*;
 import com.cyb.chat.model.Result;
+import com.cyb.chat.util.EasySocket;
 import com.cyb.chat.util.ThreadPool;
 
 import java.io.IOException;
@@ -58,22 +58,15 @@ public class Client {
     }
 
     private void go() {
-        ThreadPool.getExecutorService().scheduleWithFixedDelay(new ReadRunnable(), 0, 100, TimeUnit.MILLISECONDS);
-        ThreadPool.getExecutorService().scheduleWithFixedDelay(new HeartRunnable(), 0, 5, TimeUnit.SECONDS);
+        ThreadPool.getScheduledThreadPoolExecutor().scheduleWithFixedDelay(new ReadRunnable(), 0, 100, TimeUnit.MILLISECONDS);
+        ThreadPool.getScheduledThreadPoolExecutor().scheduleWithFixedDelay(new HeartRunnable(), 0, 5, TimeUnit.SECONDS);
         System.out.println("请输入使用的昵称");
         while (true) {
             String msg = scanner.nextLine();
-            cmdMsgHandler(user, msg);
             if (Duration.between(instantHeart, Instant.now()).getSeconds() > HEART_TIMEOUT) {
-                System.out.println(user.getRemoteSocketAddress() + "服务器已退出");
-                try {
-                    user.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                ThreadPool.getExecutorService().shutdownNow();
-                break;
+                return;
             }
+            cmdMsgHandler(user, msg);
         }
     }
 
@@ -104,7 +97,17 @@ public class Client {
             try {
                 if (user.readReady()) {
                     instantHeart = Instant.now();
-                    serverMsgHandler(user, user.readMsg());
+                    Result result = user.readMsg();
+                    serverMsgHandler(user, result);
+                }
+                if (Duration.between(instantHeart, Instant.now()).getSeconds() > HEART_TIMEOUT) {
+                    System.out.println(user.getHostAddress() + "服务器已退出");
+                    try {
+                        user.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    ThreadPool.getScheduledThreadPoolExecutor().shutdownNow();
                 }
             } catch (IOException e) {
                 e.printStackTrace();

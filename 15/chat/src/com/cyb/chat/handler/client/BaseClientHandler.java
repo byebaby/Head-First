@@ -5,13 +5,19 @@ import com.cyb.chat.model.Result;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.Vector;
 
 /**
  * @author Cyb
  */
 public abstract class BaseClientHandler {
-    BaseClientHandler baseClientHandler;
+     BaseClientHandler baseClientHandler;
+    protected static HashSet<String> whiteSet = new HashSet<>();
+
+    static {
+        whiteSet.add("127.0.0.1");
+    }
 
     BaseClientHandler(BaseClientHandler baseClientHandler) {
         this.baseClientHandler = baseClientHandler;
@@ -29,14 +35,18 @@ public abstract class BaseClientHandler {
     public static void chatTellNotify(Vector<User> users, String msg) {
         String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         for (User u : users) {
-            u.tellNotify(time + "  通知: " + msg);
+            if (u.getName() != null) {
+                u.tellNotify(time + "  通知: " + msg);
+            }
         }
     }
 
     public static void chatTellEveryone(Vector<User> users, User user, String msg) {
         String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         for (User u : users) {
-            u.tellMsg(time + "  " + user.getName() + ": " + msg);
+            if (u.getName() != null) {
+                u.tellMsg(time + "  " + user.getName() + ": " + msg);
+            }
         }
     }
 
