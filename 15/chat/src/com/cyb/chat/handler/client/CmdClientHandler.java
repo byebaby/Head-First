@@ -31,7 +31,7 @@ public class CmdClientHandler extends BaseClientHandler {
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append("当前在线总人数：").append(users.size()).append("\n");
                     for (User u : users) {
-                        stringBuilder.append(user.getHostAddress()).append("  ").append(u.getName()).append("\n");
+                        stringBuilder.append(u.getHostAddress()).append("  ").append(u.getName()).append("\n");
                     }
                     user.tellCmd(stringBuilder.toString());
                     break;
@@ -53,10 +53,10 @@ public class CmdClientHandler extends BaseClientHandler {
                     for (String s : whiteSet) {
                         if (s.equals(user.getHostAddress())) {
                             chatTellNotify(users, args);
-                        } else {
-                            user.tellError(CodeType.ERROR, MessageType.CMD, "发送失败，您不是管理员");
+                            break;
                         }
                     }
+                    user.tellError(CodeType.ERROR, MessageType.CMD, "发送失败，您不是管理员");
                     break;
                 default:
                     user.tellError(CodeType.ERROR, MessageType.CMD, "命令不存在，请检查");

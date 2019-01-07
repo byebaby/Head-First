@@ -22,7 +22,7 @@ public class NameClientHandler extends BaseClientHandler {
             for (User u : users) {
                 if (u.getName() != null && u.getName().equals(result.getMessage())) {
                     user.tellError(CodeType.ERROR, MessageType.NAME, "名字已存在,请重新输入:");
-                    break;
+                    return;
                 }
             }
             user.setName(result.getMessage());

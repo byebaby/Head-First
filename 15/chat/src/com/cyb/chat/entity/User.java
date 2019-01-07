@@ -40,6 +40,7 @@ public class User {
     }
 
     public String getHostAddress() {
+        String s = easySocket.getSocket().getRemoteSocketAddress().toString();
         return easySocket.getSocket().getInetAddress().getHostAddress();
     }
 
