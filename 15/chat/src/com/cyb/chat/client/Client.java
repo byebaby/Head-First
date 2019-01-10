@@ -115,7 +115,7 @@ public class Client {
         }
     }
 
-    private  class HeartRunnable implements Runnable {
+    private class HeartRunnable implements Runnable {
         @Override
         public void run() {
             user.tellHeart();

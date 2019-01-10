@@ -84,7 +84,15 @@ public class Server {
                     Thread.sleep(100);
                     if (user.readReady()) {
                         instantHeart = Instant.now();
-                        Result result = user.readMsg();
+                        Result result;
+                        try {
+                            result = user.readMsg();
+                        } catch (Exception e) {
+                            users.remove(user);
+                            user.close();
+                            System.out.println("协议错误,断开");
+                            break;
+                        }
                         clientMsgHandler(users, user, result);
                     }
                     if (Duration.between(instantHeart, Instant.now()).getSeconds() > heartTimeout) {
