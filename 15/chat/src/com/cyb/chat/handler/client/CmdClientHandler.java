@@ -53,7 +53,7 @@ public class CmdClientHandler extends BaseClientHandler {
                     for (String s : whiteSet) {
                         if (s.equals(user.getHostAddress())) {
                             chatTellNotify(users, args);
-                            break;
+                            return;
                         }
                     }
                     user.tellError(CodeType.ERROR, MessageType.CMD, "发送失败，您不是管理员");
